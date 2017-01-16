@@ -7,7 +7,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 public class WebCrawler implements IWebCrawler{
-	private static final int MAX_PAGES_TO_SEARCH = 500;
+	private static final int MAX_PAGES_TO_SEARCH = 100;
 	public WebCrawler(){
 	}
 	

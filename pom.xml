@@ -5,6 +5,24 @@
   <version>0.0.1-SNAPSHOT</version>
   <name>MyCrawler</name>
   <description>MyCrawler</description>
+    <build>
+    <sourceDirectory>src</sourceDirectory>
+    <plugins>
+      <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.5.1</version>
+        <configuration>
+          <source/>
+          <target/>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
+</properties>
    <dependencies>
 		<dependency>
 			<groupId>org.jsoup</groupId>
