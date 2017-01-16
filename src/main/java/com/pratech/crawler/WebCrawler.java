@@ -13,7 +13,9 @@ public class WebCrawler {
 		String baseUrl=domain.getBaseUrl();
 		Elements links = document.select("a[href]");
 		for (Element link : links) {
-			String href = link.attr("abs:href");
+//			String href = link.attr("abs:href");
+			String href = link.attr("href");
+			href=WebCrawlerUtil.normalize(href, baseUrl);
 			if (href.startsWith(baseUrl)) {
 				domain.getDomainUrls().add(href);
 			} else if (!domain.getExternalUrls().contains(href)) {
