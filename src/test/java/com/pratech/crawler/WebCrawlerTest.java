@@ -69,7 +69,45 @@ public class WebCrawlerTest {
     		assertTrue(str.length()>=host.length());
 		}
     	assertTrue((domain.getVisitedDomainUrls().size()>1));
-//    	domain.getVisitedDomainUrls().forEach(url -> assertTrue(url.length()>=host.length()));    	   	
+    }
+    
+    @Test 
+    public void getExternalLinks() {
+    	StringBuffer html = new StringBuffer("<a href=\"http://tyudsf.tref\"></a>"); 
+    	html.append("<script src=\"https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js\"></script>");
+    	html.append("<a href=\"http://www.xyzabcdef.co.uk\"></a>");
+    	html.append("<a href=\"http://tyudsf.tref/company\"></a>"); 
+    	html.append("<img src=\"http://uhtgfs.kltdf/img/test.png\" alt=\"Wait\" />"); 
+//    	html.append("<a href=\"/ref/references.html\"></a>");
+    	String host = "http://tyudsf.tref"; 
+    	Domain domain=new Domain(host);
+    	setDoc(html.toString(), host);
+    	crawler.crawl(domain,doc,host);
+    	assertTrue(domain.getExternalUrls().size()==1);
+    	assertThat(domain.getExternalUrls(),hasItem("http://www.xyzabcdef.co.uk"));
+    	assertTrue(!domain.getExternalUrls().contains("http://tyudsf.tref/company"));
+    	assertTrue(!domain.getExternalUrls().contains("https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"));
+    }
+    
+    @Test 
+    public void getStaticLinks() {
+    	StringBuffer html = new StringBuffer("<a href=\"http://example.tst/x/y/z\"></a>"); 
+    	html.append("<a href=\"http://www.abcdef.co.uk\"></a>");
+    	html.append("<img src=\"../img/ajax-loader.gif\" alt=\"Wait\" />"); 
+    	html.append("<a href=\"references.html\"></a>");
+    	html.append("<link rel=\"stylesheet\" href=\"../../dist/css/dvf.css\" type= \"text/css\" media=\"screen\"/>");
+//    	html.append("<script src=\"https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js\"></script>");
+    	html.append("<script type=\"text/javascript\" src=\"../dist/leaflet-dvf.js\"></script>");
+    	String host = "http://example.tst"; 
+    	Domain domain=new Domain(host);
+    	setDoc(html.toString(), host);
+    	crawler.crawl(domain,doc,host);
+    	assertTrue(!domain.getStaticUrls().contains("http://example.tst/references.html"));
+    	assertTrue(domain.getDomainUrls().contains("http://example.tst/references.html"));
+    	assertTrue(domain.getStaticUrls().contains("../img/ajax-loader.gif"));
+    	assertTrue(domain.getStaticUrls().contains("../../dist/css/dvf.css"));
+    	assertTrue(domain.getStaticUrls().contains("../dist/leaflet-dvf.js"));
+    	assertTrue(domain.getExternalUrls().contains("http://www.abcdef.co.uk"));
     }
     
     private void setDoc(String html, String host) {

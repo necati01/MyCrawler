@@ -12,9 +12,12 @@ public class WebCrawler implements IWebCrawler{
 	}
 	
 	public void crawl(Domain domain, Document document, String url) {
-			domain.getVisitedDomainUrls().add(url);
-			getDomainUrls(domain, document, url);
-			domain.getDomainUrls().add(url);
+		getImgStaticUrls(domain, document, url);	
+		getSrcStaticUrls(domain, document, url);
+		getLinkStaticUrls(domain, document, url);
+		domain.getVisitedDomainUrls().add(url);
+		getDomainUrls(domain, document, url);
+		domain.getDomainUrls().add(url);
 	}
 	
 	private void getDomainUrls(Domain domain, Document document,String url){
@@ -26,18 +29,42 @@ public class WebCrawler implements IWebCrawler{
 			if (href.startsWith(baseUrl)) {
 				if (!domain.getVisitedDomainUrls().contains(href)) {
 					try {
-						document =  WebCrawlerUtil.getPage(href);
+						Document doc =  WebCrawlerUtil.getPage(href);
+						crawl(domain,doc,href);
+						domain.getDomainUrls().add(href);
 					} catch (IllegalArgumentException e) {
 						e.printStackTrace();
 					} catch (IOException e) {
 						return;
 					}
-					crawl(domain,document,href);
-					domain.getDomainUrls().add(href);
 				}
 			} else if (!domain.getExternalUrls().contains(href)) {
 				domain.getExternalUrls().add(href);
 			}
+		}
+	}
+	
+	private void getSrcStaticUrls(Domain domain, Document document,String url){
+		Elements links = document.select("script");
+		for (Element link : links) {
+			String href = link.attr("src");
+			domain.getStaticUrls().add(href);
+		}
+	}
+	
+	private void getLinkStaticUrls(Domain domain, Document document,String url){
+		Elements links = document.select("link");
+		for (Element link : links) {
+			String href = link.attr("abs:href");
+			domain.getStaticUrls().add(href);
+		}
+	}
+	
+	private void getImgStaticUrls(Domain domain, Document document,String url){
+		Elements links = document.select("img");
+		for (Element link : links) {
+			String href = link.attr("src");
+				domain.getStaticUrls().add(href);
 		}
 	}
 	
