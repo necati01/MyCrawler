@@ -18,6 +18,7 @@ public class WebCrawlerUtil {
 	public static String normalize(String inputUrl, String baseUrl) {
         if(inputUrl.startsWith("http://"))                   return inputUrl;
         if(inputUrl.startsWith("https://"))                  return inputUrl;
+        if(inputUrl.contains("mailto:"))                  	return inputUrl;
         if(inputUrl.toLowerCase().startsWith("javascript:")) return inputUrl;
 
         StringBuilder normalizedUrl = new StringBuilder();
