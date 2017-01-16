@@ -7,7 +7,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 public class WebCrawler implements IWebCrawler{
-	
+	private static final int MAX_PAGES_TO_SEARCH = 500;
 	public WebCrawler(){
 	}
 	
@@ -16,8 +16,12 @@ public class WebCrawler implements IWebCrawler{
 		getSrcStaticUrls(domain, document, url);
 		getLinkStaticUrls(domain, document, url);
 		domain.getVisitedDomainUrls().add(url);
-		getDomainUrls(domain, document, url);
 		domain.getDomainUrls().add(url);
+		if(domain.getVisitedDomainUrls().size()>MAX_PAGES_TO_SEARCH){
+			return;
+		}
+		getDomainUrls(domain, document, url);
+		
 	}
 	
 	private void getDomainUrls(Domain domain, Document document,String url){
