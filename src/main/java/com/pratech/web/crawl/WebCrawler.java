@@ -11,7 +11,7 @@ import org.jsoup.select.Elements;
 public class WebCrawler  {
 	private static final int MAX_PAGES_TO_SEARCH = 100;
 
-	private final WebCrawlerUtil webCrawlerUtil = new WebCrawlerUtil();
+	private final PageDownloader pageDownloader = new PageDownloader();
 	private final PageLinkExtracter pageLinkExtracter = new PageLinkExtracter();
 	private final PathMerger pathMerger = new PathMerger();
 
@@ -20,7 +20,7 @@ public class WebCrawler  {
 
 	public void crawl(SiteUrlList siteUrlList, String url) throws IOException {
 
-		Document document =  webCrawlerUtil.getPage(url);
+		Document document =  pageDownloader.getPage(url);
 
 		// add image urls, static urls, css urls to the list
 		pageLinkExtracter.extractStaticLinks(siteUrlList, document, "img", "src");
